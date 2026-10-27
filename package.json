@@ -1,13 +1,11 @@
 {
   "name": "digitalne-propusnice",
   "version": "1.0.0",
-  "description": "Web2 FER lab 1: digitalne propusnice",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
   },
-  "license": "ISC",
   "type": "commonjs",
   "dependencies": {
     "dotenv": "^18.0.9",
@@ -20,9 +18,5 @@
     "@types/pg": "^8.23.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
-  },
-  "private": true,
-  "engines": {
-    "node": ">=20"
   }
 }

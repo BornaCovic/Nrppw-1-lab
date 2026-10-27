@@ -10,6 +10,14 @@ if (process.env.DATABASE_SSL === "true") {
 
 const pool = new Pool(config);
 
+interface Pass {
+  id: string;
+  name: string;
+  document: string;
+  issued_at: Date;
+  status: string;
+}
+
 export async function createTable(): Promise<void> {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS passes (
@@ -20,4 +28,23 @@ export async function createTable(): Promise<void> {
       status VARCHAR
     )
   `);
+}
+
+export async function countAll(): Promise<number> {
+  const result = await pool.query("SELECT COUNT(*) AS count FROM passes");
+  return Number(result.rows[0].count);
+}
+
+export async function countActive(): Promise<number> {
+  const result = await pool.query("SELECT COUNT(*) AS count FROM passes WHERE status = 'ACTIVE'");
+  return Number(result.rows[0].count);
+}
+
+export async function getPass(id: string): Promise<Pass | null> {
+  const result = await pool.query("SELECT * FROM passes WHERE id::text = $1", [id]);
+  if (result.rows.length === 0) {
+    return null;
+  }
+  const pass: Pass = result.rows[0];
+  return pass;
 }

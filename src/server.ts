@@ -1,15 +1,13 @@
 import "dotenv/config";
-import express, { Request, Response } from "express";
+import express from "express";
 import { createTable } from "./db";
+import { handleHome, handleInfo } from "./routes/public";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
-function handleHome(req: Request, res: Response): void {
-  res.send("Server radi!");
-}
-
 app.get("/", handleHome);
+app.get("/info/:id", handleInfo);
 
 function handleListen(): void {
   console.log(`Server sluša na http://localhost:${PORT}`);
