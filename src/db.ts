@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import { Pool, PoolConfig } from "pg";
 
 const config: PoolConfig = {
@@ -47,4 +48,13 @@ export async function getPass(id: string): Promise<Pass | null> {
   }
   const pass: Pass = result.rows[0];
   return pass;
+}
+
+export async function createPass(name: string, document: string): Promise<string> {
+  const id = randomUUID();
+  await pool.query(
+    "INSERT INTO passes (id, name, document, issued_at, status) VALUES ($1, $2, $3, $4, $5)",
+    [id, name, document, new Date(), "ACTIVE"]
+  );
+  return id;
 }

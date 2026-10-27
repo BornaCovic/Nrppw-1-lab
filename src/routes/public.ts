@@ -1,6 +1,15 @@
 import { Request, Response } from "express";
 import { countAll, countActive, getPass } from "../db";
 
+function escapeHtml(text: string): string {
+  let result = text;
+  result = result.replaceAll("&", "&amp;");
+  result = result.replaceAll("<", "&lt;");
+  result = result.replaceAll(">", "&gt;");
+  result = result.replaceAll('"', "&quot;");
+  return result;
+}
+
 function renderPage(title: string, body: string): string {
   return `<!DOCTYPE html>
 <html lang="hr">
@@ -42,8 +51,8 @@ export async function handleInfo(req: Request, res: Response): Promise<void> {
 
   const body = `
     <p>Status: <strong>${pass.status}</strong></p>
-    <p>Ime i prezime: ${pass.name}</p>
-    <p>Dokument: ${pass.document}</p>
+    <p>Ime i prezime: ${escapeHtml(pass.name)}</p>
+    <p>Dokument: ${escapeHtml(pass.document)}</p>
     <p>Vrijeme izdavanja: ${pass.issued_at.toISOString()}</p>
   `;
   res.send(renderPage("Propusnica", body));
