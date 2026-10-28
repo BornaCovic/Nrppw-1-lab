@@ -58,3 +58,17 @@ export async function createPass(name: string, document: string): Promise<string
   );
   return id;
 }
+
+export async function listPasses(): Promise<Pass[]> {
+  const result = await pool.query("SELECT * FROM passes ORDER BY issued_at DESC");
+  const passes: Pass[] = result.rows;
+  return passes;
+}
+
+export async function cancelPass(id: string): Promise<void> {
+  await pool.query("UPDATE passes SET status = 'CANCELLED' WHERE id::text = $1", [id]);
+}
+
+export async function deletePass(id: string): Promise<void> {
+  await pool.query("DELETE FROM passes WHERE id::text = $1", [id]);
+}
